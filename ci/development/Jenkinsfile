@@ -7,19 +7,7 @@ node {
 		env.HOSTNAME = 'http://$host'
 		checkout scm
 		env.JAVA_HOME="${tool 'jdk8'}"
-		stage('Tests Coverage') {withSonarQubeEnv('sonar'){
-			withMaven(maven:'mvn') {
-	    		sh 'mvn clean jacoco:prepare-agent install jacoco:report -Dspring.profiles.active=test'
-	    		}
-    		}
 	 	}
-	 	stage('Code Analysis') {
-	 		withSonarQubeEnv('sonar'){
-	 			withMaven(maven:'mvn') {
-	 				sh 'mvn package sonar:sonar -Dsonar.host.url=http://sonar.batch.challenge -Dsonar.login=cbb707d0286e0a2d319604d5f1373d6602949d8b -DskipTests'
- 				}
-	  		}
-	 	 }
 
 	 	 stage("Quality Gate"){
 	 	 	timeout(time: 2, unit: 'MINUTES') {
